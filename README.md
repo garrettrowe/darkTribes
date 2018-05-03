@@ -16,7 +16,7 @@ View the interactive demo and video here: https://ibm.biz/darkTribes
 * [Node.js on IBM Bluemix](https://console.ng.bluemix.net/catalog/starters/sdk-for-nodejs/)
 * [IBM Dynamic Dashboard Embedded](https://developer.ibm.com/data/dynamic-dashboards/)
 * [Watson Machine Learning](https://www.ibm.com/cloud/machine-learning)
-* [Watson Personality Insights] (https://www.ibm.com/watson/services/personality-insights/)
+* [Watson Personality Insights](https://www.ibm.com/watson/services/personality-insights/)
 
 
 ### Run the app locally
