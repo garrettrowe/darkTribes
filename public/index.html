@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Illuminating Dark Tribes with Watson</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://watson-discovery.bluemix.net/favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>  
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.0/bluebird.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/7.2.1/jsrsasign-all-min.js"></script>
+    <script src="./scripts/cognosApi.js"></script>
+    <script src="./scripts/textSummary.js"></script>
+    <script src="./scripts/client.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./stylesheets/style.css">
+</head>
+<body>
+<style>
+    .btn-default{ text-align: center; }
+    input[type="checkbox"]{
+        margin-right:8px;
+    }
+
+    p{
+        margin: 0 0 2px;
+        clear:both;
+    }
+    
+    p.size{
+        font-size: 14px;
+    }
+</style>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+            <ul class="nav navbar-nav hidden-xs">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <div class="micon"></div><div class="micon"></div><div class="micon"></div>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href='http://ibm.biz/vegetationManagement'>Cognitive Vegetation Optimization</a></li><li><a href='http://ibm.biz/chatClassification'>Cognitive Chat Demo</a></li><li><a href='http://commscalendarapi.mybluemix.net/news/'>Cognitive News Demo</a></li><li role="separator" class="divider"></li><li><a href="http://ibm.biz/commsdemos">Demo Blog</a></li>
+                </ul>
+            </li>
+            </ul>
+            <a class="navbar-brand" href="#">
+                <img alt="" src="https://console-dal10-red.cdn.s-bluemix.net/cache/b86-87010155/api/v6/img/ibm-cloud-logo-white.svg">
+                <h2 class="bx--logo__text">IBM&nbsp;<span class="bx--logo__text--bold">Cloud</span></h2><h4 class="bx--global-header__title--current-page">Demo</h4>
+            </a> 
+            
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a target="_blank" href="https://console.bluemix.net/registration/?target=%2Fdashboard%2Fapps">Start Free Today!</a></li>
+                <li><a target="_blank" href="https://www-01.ibm.com/marketing/iwm/dre/signup?source=MAIL-watson&disableCookie=Yes">Contact Us</a></li>
+            </ul>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+    <div class="jumbotron">
+      <div class="container">
+        <br></br>
+            <div class="col-md-2 hidden-xs">
+                <p><img src='https://www.ibm.com/blogs/cloud-computing/wp-content/uploads/2014/03/logo.png' width="200px" class="img-fluid" alt="Responsive image"></p>
+            </div>
+
+            <div class="col-md-7">
+                <p class="a">
+                <b>Illuminating Dark Tribes with Watson</b>
+                <p class="size">
+                Recent studies by Gartner L2 have uncovered that Micro Tribe influencers in Social Media provide up to 600% more revenue value over macro traditional sources. Are you utilizing the power of these brand influencers? IBM, thru Watson can fingerprint your Micro Tribes personalities thru their Dark Social interaction - allowing you to easily match similar Tribes with meaningful Brand Plays across the breadth of your Micro Tribe influencers.
+                <br/>
+                <a href="https://www.ibm.com/watson/services/personality-insights/">Watson Personality Insights</a> powers this demo.  It predicts personality characteristics, needs and values through written text. Understand your customers’ habits and preferences on an individual level, and at Micro Tribe scale. 
+                <br/>
+                <a href="https://developer.ibm.com/data/dynamic-dashboards/">IBM Dynamic Dashboard Embedded</a> powers these visulizations.  It is a new, API-based solution that lets developers easily add end-to-end data visualization capabilities to their applications so users can create visualizations that feel like part of the app.
+                <br/>
+                <a href="https://www.ibm.com/cloud/machine-learning">Watson Machine Learning</a> selects our brand play. Use your own data to create, train, and deploy machine learning and deep learning models. Leverage an automated, collaborative workflow to grow intelligent business applications easily and with more confidence. 
+                </p>
+            </div>
+            <div class="col-md-3">
+                <div class="embed-responsive embed-responsive-4by3">
+                    <video width="320" height="240" controls>
+                      <source src="https://ibm.box.com/shared/static/b6fegjzi61df8mncq22s8fr6iu21wgak.mp4" type="video/mp4">
+                    IBM Watson Demos
+                    </video> 
+                </div>
+            </div>
+      </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class = "conButtons">
+                            <button id="bClear" type="button" class="btn btn-primary vert"><i class="fa fa-fire-extinguisher" aria-hidden="true"></i> Clear</button>
+                            <div class="btn-group" role="group" aria-label="Samples">
+                                <button id="bConA" type="button" class="btn btn-primary vert">A <i class="fa fa-commenting-o" aria-hidden="true"></i></button>
+                                <button id="bConB" type="button" class="btn btn-primary vert">B <i class="fa fa-commenting-o" aria-hidden="true"></i></button>
+                                <button id="bConC" type="button" class="btn btn-primary vert">C <i class="fa fa-commenting-o" aria-hidden="true"></i></button>
+                            </div>
+                            <button id="bSubmit" type="button" class="btn btn-primary vert">Submit <i class="fa fa-download fa-rotate-270" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="panel-body" >
+                        <div id="conversation" contenteditable="true"><center><br><br>Select a sample Tribe dataset using a <i class="fa fa-commenting-o" aria-hidden="true"></i> button above, or paste your own 100+ words of Tribe text here.<br><br>The, click Submit <i class="fa fa-download fa-rotate-270" aria-hidden="true"></i> to send the text to Watson to choose the best cross-brand promotion to run for this Tribe</div>
+                        <div id="sessionId"></div>
+                    </div>               
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="personalitySummaryPanel" class="panel panel-default hidden" style="margin-bottom: 0px;padding-bottom: 0px;"">
+                    <div class="panel-heading">Tribe Personality Analysis</div>
+                    <div class="panel-body" >
+                        <div id="personalitySummary"></div>
+                    </div>
+                </div>
+                    <div class="panel panel-default" style="margin-bottom: 0px;padding-bottom: 0px;"">
+                    <div id="promotionTitle" class="panel-heading">Available Promotions to pitch the Tribe</div>
+                    <div class="panel-body" id="promotions">
+                    </div>
+                    <div id="predictions" class="hidden"></div>
+                </div>                 
+            </div>
+            <div class="col-md-4">
+                <div class="iframeContainer" id="containerDivId"></div>   
+            </div>
+        </div>
+      <footer class="footer">
+        <hr>
+        <p>&copy; 2018 IBM
+        <a class="btn btn-default pull-right" target="_blank" href="https://github.com/garrettrowe/darkTribes">
+        <i class="fa fa-github fa-2x pull-left"></i>Get the Code</a></p>
+      </footer>
+    </div> 
+</body>
+</html>
