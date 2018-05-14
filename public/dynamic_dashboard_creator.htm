@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.0/bluebird.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/7.2.1/jsrsasign-all-min.js"></script>
+  <script src="https://dde-us-south.analytics.ibm.com/daas/CognosApi.js"></script>
+
+  <style>
+    .iframeContainer {
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .iframeContainer pre {
+      display: flex;
+      font-size: medium;
+      white-space: pre-wrap;
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="iframeContainer" id="containerDivId"></div>
+</body>
+<script type="text/javascript">
+
+//set this before beginning!
+var id = prompt("Please enter a valid sessionID", "");
+var sessionObj = null;
+var cognosApi = null;
+
+var needsCSV = "https://cognitiveBrandPromotion.mybluemix.net/needs.csv?sessionId=" + id + "&r=" + Math.random();
+var valuesCSV = "https://cognitiveBrandPromotion.mybluemix.net/values.csv?sessionId=" + id + "&r=" + Math.random();
+var sentimentCSV = "https://cognitiveBrandPromotion.mybluemix.net/sentiment.csv?sessionId=" + id + "&r=" + Math.random();
+var predictionCSV = "https://cognitiveBrandPromotion.mybluemix.net/prediction.csv?sessionId=" + id + "&r=" + Math.random();
+
+var needsSource = {"xsd": "https://ibm.com/daas/module/1.0/module.xsd", "source": {"id": "StringID", "srcUrl": {"sourceUrl": needsCSV, "mimeType": "text/csv"} }, "table": {"name": "Needs", "column": [{"name": "Name", "datatype": "NVARCHAR(40)", "nullable": true, "description": "Name", "label": "Name", "usage": "attribute", "regularAggregate": "none"}, {"datatype": "BIGINT", "nullable": true, "name": "Percentile", "description": "Percentile", "label": "Percentile", "usage": "fact", "regularAggregate": "none", "taxonomyFamily": "cYear"}, {"datatype": "NVARCHAR(40)", "nullable": true, "name": "Category", "description": "Category", "label": "Category", "usage": "attribute", "regularAggregate": "none"} ] }, "label": "Needs", "identifier": "1"};
+
+
+var valuesSource = {"xsd": "https://ibm.com/daas/module/1.0/module.xsd", "source": {"id": "StringID", "srcUrl": {"sourceUrl": valuesCSV, "mimeType": "text/csv"} }, "table": {"name": "Values", "column": [{"name": "Name", "datatype": "NVARCHAR(40)", "nullable": true, "description": "Name", "label": "Name", "usage": "attribute", "regularAggregate": "none"}, {"datatype": "BIGINT", "nullable": true, "name": "Percentile", "description": "Percentile", "label": "Percentile", "usage": "fact", "regularAggregate": "none", "taxonomyFamily": "cYear"}, {"datatype": "NVARCHAR(40)", "nullable": true, "name": "Category", "description": "Category", "label": "Category", "usage": "attribute", "regularAggregate": "none"} ] }, "label": "Values", "identifier": "1"};
+
+
+var sentimentSource = {"xsd": "https://ibm.com/daas/module/1.0/module.xsd", "source": {"id": "StringID", "srcUrl": {"sourceUrl": sentimentCSV, "mimeType": "text/csv"} }, "table": {"name": "Sentiment", "column": [{"name": "Name", "datatype": "NVARCHAR(40)", "nullable": true, "description": "Name", "label": "Name", "usage": "attribute", "regularAggregate": "none"}, {"datatype": "BIGINT", "nullable": true, "name": "Percentile", "description": "Percentile", "label": "Percentile", "usage": "fact", "regularAggregate": "none", "taxonomyFamily": "cYear"}, {"datatype": "NVARCHAR(40)", "nullable": true, "name": "Category", "description": "Category", "label": "Category", "usage": "attribute", "regularAggregate": "none"} ] }, "label": "Sentiment", "identifier": "1"};
+
+var predictionSource = {"xsd": "https://ibm.com/daas/module/1.0/module.xsd", "source": {"id": "StringID", "srcUrl": {"sourceUrl": predictionCSV, "mimeType": "text/csv"} }, "table": {"name": "Prediction", "column": [{"name": "Name", "datatype": "NVARCHAR(40)", "nullable": true, "description": "Name", "label": "Name", "usage": "attribute", "regularAggregate": "none"}, {"datatype": "BIGINT", "nullable": true, "name": "Percentile", "description": "Percentile", "label": "Percentile", "usage": "fact", "regularAggregate": "none", "taxonomyFamily": "cYear"}, {"datatype": "NVARCHAR(40)", "nullable": true, "name": "Category", "description": "Category", "label": "Category", "usage": "attribute", "regularAggregate": "none"} ] }, "label": "Prediction", "identifier": "1"};
+
+
+var dashSpec = null  
+
+  $.get('/session', function(result) {
+          sessionObj = result;
+          cognosApi = new CognosApi({
+              cognosRootURL: 'https://dde-us-south.analytics.ibm.com/daas/',
+              sessionCode: sessionObj.sessionCode,
+              node: document.getElementById('containerDivId')
+          });
+          cognosApi.initialize().then(function() {
+
+
+/*
+Uncomment this to test your dashboard
+
+              cognosApi.dashboard.openDashboard({dashboardSpec: dashSpec}).then(
+                  function(dashboardAPI) {
+                      cognosApi.dashboardAPI = dashboardAPI;
+                      cognosApi.dashboardAPI.MODES.EDIT;
+                  }
+              ).catch(
+                  function(err) {
+                      console.log(err);
+                  }
+              );
+
+*/
+//Uncomment this block to create a dashboard
+
+
+              cognosApi.dashboard.createNew().then(
+                  function(dashboardAPI) {
+                    cognosApi.dashboardAPI = dashboardAPI;
+                    cognosApi.dashboardAPI.addSources([{
+                        module: needsSource,
+                        name: 'Needs',
+                        id: '1'
+                    }]);
+                    cognosApi.dashboardAPI.addSources([{
+                        module: valuesSource,
+                        name: 'Values',
+                        id: '2'
+                    }]);
+                    cognosApi.dashboardAPI.addSources([{
+                        module: sentimentSource,
+                        name: 'Sentiment',
+                        id: '3'
+                    }]);
+                    cognosApi.dashboardAPI.addSources([{
+                        module: predictionSource,
+                        name: 'Prediction',
+                        id: '4'
+                    }]);
+                  }
+              ).catch(
+                  function(err) {
+                      console.log(err);
+                  }
+              );
+
+          }, function(err) {
+              console.log('Failed to create API. ' + err.message);
+          });
+        });
+
+    // call this to get you object
+    function save(){
+      cognosApi.dashboardAPI.getSpec().then(function(spec){ console.log(JSON.stringify(spec)); });
+    }
+</script>
+</html>
+
+
+
+
+
